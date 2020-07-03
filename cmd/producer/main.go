@@ -1,17 +1,18 @@
-package producer
+package main
 
 import (
 	"context"
 	"fmt"
+	"math/rand"
 
 	"github.com/rs/zerolog/log"
-	"github.com/triardn/simple-kafka-producer-consumer/kafka"
+	"github.com/triardn/websocket-example/simple-kafka-producer-consumer/kafka"
 )
 
 var logger = log.With().Str("pkg", "main").Logger()
 
 func main() {
-	kafkaBrokerURLs := []string{"localhost:19092"}
+	kafkaBrokerURLs := []string{"127.0.0.1:9092"}
 	kafkaProducer, err := kafka.Init(kafkaBrokerURLs, "test-client", "topic-test-1")
 	if err != nil {
 		logger.Error().Str("error", err.Error()).Msg("unable to configure kafka")
@@ -19,11 +20,14 @@ func main() {
 	}
 	defer kafkaProducer.Close()
 
-	msg := []byte("Test dong")
+	message := "Test Dong #" + string(rand.Int())
+
+	msg := []byte(message)
 
 	err = kafka.Push(context.Background(), nil, msg)
 	if err != nil {
 		fmt.Println("error pushing data")
+		fmt.Println(err)
 
 		return
 	}
