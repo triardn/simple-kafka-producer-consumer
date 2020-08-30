@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/rs/zerolog/log"
+	"github.com/triardn/simple-kafka-producer-consumer/generator"
 	"github.com/triardn/simple-kafka-producer-consumer/kafka"
 )
 
@@ -20,7 +21,7 @@ func main() {
 	defer kafkaProducer.Close()
 
 	for i := 0; i < 10; i++ {
-		message := "Test Dong #" + string(i)
+		message := generator.GenerateMessage(i)
 
 		msg := []byte(message)
 
